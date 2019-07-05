@@ -161,7 +161,7 @@ void setCalibration_32V_2A() {
  *  @param  on
  *          boolean value
  */
-void powerSave(bool on) {
+void powerSave(int on) {
   uint16_t current;
   wireReadRegister(INA219_REG_CONFIG, &current);
   uint8_t next;
