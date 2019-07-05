@@ -46,7 +46,8 @@ void wireWriteRegister(uint8_t reg, uint16_t value) {
 //  _i2c->write((value >> 8) & 0xFF); // Upper 8-bits
 //  _i2c->write(value & 0xFF);        // Lower 8-bits
 //  _i2c->endTransmission();
-  delay(1);
+//  delay();
+  ;
 }
 
 
@@ -64,8 +65,8 @@ void wireReadRegister(uint8_t reg, uint16_t *value) {
  // _i2c->write(reg); // Register
  // _i2c->endTransmission();
 
-  delay(1); // Max 12-bit conversion time is 586us per sample
-
+//  delay(1); // Max 12-bit conversion time is 586us per sample
+;
  // _i2c->requestFrom(ina219_i2caddr, (uint8_t)2);
   // Shift values to create properly formed integer
  // *value = ((_i2c->read() << 8) | _i2c->read());
