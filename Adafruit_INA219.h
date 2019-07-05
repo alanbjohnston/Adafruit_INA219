@@ -12,13 +12,14 @@
  *
  * BSD license, all text here must be included in any redistribution.
  *
+ * Converted to C for Raspberry Pi by Alan Johnston KU2Y
+ *
  */
 
 #ifndef _LIB_ADAFRUIT_INA219_
 #define _LIB_ADAFRUIT_INA219_
 
-#include "Arduino.h"
-#include <Wire.h>
+#include <wiringPi.h>
 
 /** default I2C address **/
 #define INA219_ADDRESS (0x40) // 1000000 (A0+A1=GND)
@@ -124,12 +125,9 @@ enum {
 #define INA219_REG_CALIBRATION (0x05)
 
 /*!
- *   @brief  Class that stores state and functions for interacting with INA219
+ *   functions for interacting with INA219
  *  current/power monitor IC
  */
-class Adafruit_INA219 {
-public:
-  Adafruit_INA219(uint8_t addr = INA219_ADDRESS);
   void begin(TwoWire *theWire = &Wire);
   void setCalibration_32V_2A();
   void setCalibration_32V_1A();
@@ -139,9 +137,6 @@ public:
   float getCurrent_mA();
   float getPower_mW();
   void powerSave(bool on);
-
-private:
-  TwoWire *_i2c;
 
   uint8_t ina219_i2caddr;
   uint32_t ina219_calValue;
