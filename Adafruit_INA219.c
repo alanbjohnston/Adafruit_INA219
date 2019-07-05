@@ -27,7 +27,7 @@
  */
 
 #include <wiringPi.h>
-
+#include <stdint.h>
 #include "Adafruit_INA219.h"
 
 /*!
