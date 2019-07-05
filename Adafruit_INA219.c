@@ -374,7 +374,7 @@ void begin(TwoWire *theWire) {
 /*!
  *  @brief  begin I2C and set up the hardware
  */
-init() {
+void init() {
 //  
 //   Add initialization of I2C using WiringPi
 //
