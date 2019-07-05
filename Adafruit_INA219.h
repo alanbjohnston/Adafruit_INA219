@@ -152,6 +152,6 @@ enum {
   int16_t getShuntVoltage_raw();
   int16_t getCurrent_raw();
   int16_t getPower_raw();
-};
+}
 
 #endif
