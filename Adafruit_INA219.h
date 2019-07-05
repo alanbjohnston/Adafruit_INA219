@@ -136,7 +136,7 @@ enum {
   float getShuntVoltage_mV();
   float getCurrent_mA();
   float getPower_mW();
-  void powerSave(bool on);
+  void powerSave(int on);
 
   uint8_t ina219_i2caddr;
   uint32_t ina219_calValue;
