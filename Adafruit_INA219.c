@@ -59,7 +59,7 @@ void wireWriteRegister(uint8_t reg, uint16_t value) {
  *  @param  *value
  *          read value
  *
- * use instead iringPiI2CReadReg16(x_fd, INA219_REG_CURRENT) */
+ * use instead wiringPiI2CReadReg16(x_fd, INA219_REG_CURRENT) */
 void wireReadRegister(uint8_t reg, uint16_t *value) {
 
  // _i2c->beginTransmission(ina219_i2caddr);
@@ -80,7 +80,7 @@ void wireReadRegister(uint8_t reg, uint16_t *value) {
  *          occurs at 3.2A.
  *  @note   These calculations assume a 0.1 ohm resistor is present
  */
-void setCalibration_32V_2A() {
+void setCalibration_32V_2A(int fd) {
   // By default we use a pretty huge range for the input voltage,
   // which probably isn't the most appropriate choice for system
   // that don't use a lot of power.  But all of the calculations
@@ -149,14 +149,14 @@ void setCalibration_32V_2A() {
   ina219_powerMultiplier_mW = 2; // Power LSB = 1mW per bit (2/1)
 
   // Set Calibration register to 'Cal' calculated above
-  wireWriteRegister(INA219_REG_CALIBRATION, ina219_calValue);
+  wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
 
   // Set Config register to take into account the settings above
   uint16_t config = INA219_CONFIG_BVOLTAGERANGE_32V |
                     INA219_CONFIG_GAIN_8_320MV | INA219_CONFIG_BADCRES_12BIT |
                     INA219_CONFIG_SADCRES_12BIT_1S_532US |
                     INA219_CONFIG_MODE_SANDBVOLT_CONTINUOUS;
-  wireWriteRegister(INA219_REG_CONFIG, config);
+  wiringPiI2CWriteReg16(fd, INA219_REG_CONFIG, config);
 }
 
 /*!
@@ -164,16 +164,17 @@ void setCalibration_32V_2A() {
  *  @param  on
  *          boolean value
  */
-void powerSave(int on) {
+void powerSave(int fd, int on) {
   uint16_t current;
-  wireReadRegister(INA219_REG_CONFIG, &current);
+  //wireReadRegister(INA219_REG_CONFIG, &current);
+  current = wiringPiI2CReadReg16(fd, INA219_REG_CONFIG);
   uint8_t next;
   if (on) {
     next = current | INA219_CONFIG_MODE_POWERDOWN; 
   } else {
     next = current & ~INA219_CONFIG_MODE_POWERDOWN; 
   }
-  wireWriteRegister(INA219_REG_CONFIG, next);
+  wiringPiI2CWriteReg16(fd, INA219_REG_CONFIG, next);
 }
 
 
@@ -184,7 +185,7 @@ void powerSave(int on) {
  *          1.3A.
  *  @note   These calculations assume a 0.1 ohm resistor is present
  */
-void setCalibration_32V_1A() {
+void setCalibration_32V_1A(int fd) {
   // By default we use a pretty huge range for the input voltage,
   // which probably isn't the most appropriate choice for system
   // that don't use a lot of power.  But all of the calculations
@@ -256,14 +257,14 @@ void setCalibration_32V_1A() {
   ina219_powerMultiplier_mW = 0.8f; // Power LSB = 800uW per bit
 
   // Set Calibration register to 'Cal' calculated above
-  wireWriteRegister(INA219_REG_CALIBRATION, ina219_calValue);
+  wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
 
   // Set Config register to take into account the settings above
   uint16_t config = INA219_CONFIG_BVOLTAGERANGE_32V |
                     INA219_CONFIG_GAIN_8_320MV | INA219_CONFIG_BADCRES_12BIT |
                     INA219_CONFIG_SADCRES_12BIT_1S_532US |
                     INA219_CONFIG_MODE_SANDBVOLT_CONTINUOUS;
-  wireWriteRegister(INA219_REG_CONFIG, config);
+  wiringPiI2CWriteReg16(fd, INA219_REG_CONFIG, config);
 }
 
 /*!
@@ -271,7 +272,7 @@ void setCalibration_32V_1A() {
  *     current measurement (0.1mA), at the expense of
  *     only supporting 16V at 400mA max.
  */
-void setCalibration_16V_400mA() {
+void setCalibration_16V_400mA(int fd) {
 
   // Calibration which uses the highest precision for
   // current measurement (0.1mA), at the expense of
@@ -344,25 +345,26 @@ void setCalibration_16V_400mA() {
   ina219_powerMultiplier_mW = 1.0f; // Power LSB = 1mW per bit
 
   // Set Calibration register to 'Cal' calculated above
-  wireWriteRegister(INA219_REG_CALIBRATION, ina219_calValue);
+  wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
 
   // Set Config register to take into account the settings above
   uint16_t config = INA219_CONFIG_BVOLTAGERANGE_16V |
                     INA219_CONFIG_GAIN_1_40MV | INA219_CONFIG_BADCRES_12BIT |
                     INA219_CONFIG_SADCRES_12BIT_1S_532US |
                     INA219_CONFIG_MODE_SANDBVOLT_CONTINUOUS;
-  wireWriteRegister(INA219_REG_CONFIG, config);
+  wiringPiI2CWriteReg16(fd, INA219_REG_CONFIG, config);
 }
 
 /*!
  *  @brief  Instantiates a new INA219 class
  *  @param addr the I2C address the device can be found on. Default is 0x40
- */
+ *
 void Adafruit_INA219(uint8_t addr) {
   ina219_i2caddr = addr;
   ina219_currentDivider_mA = 0;
   ina219_powerMultiplier_mW = 0.0f;
 }
+*/
 
 /*!
  *  @brief  Setups the HW (defaults to 32V and 2A for calibration values)
@@ -377,22 +379,23 @@ void begin(TwoWire *theWire) {
 /*!
  *  @brief  begin I2C and set up the hardware
  */
-void init() {
+void init(int fd) {
 //  
 //   Add initialization of I2C using WiringPi
 //
 //  _i2c->begin();
   // Set chip to large range config values to start
-  setCalibration_32V_2A();
+  setCalibration_32V_2A(fd);
 }
 
 /*!
  *  @brief  Gets the raw bus voltage (16-bit signed integer, so +-32767)
  *  @return the raw bus voltage reading
  */
-int16_t getBusVoltage_raw() {
+int16_t getBusVoltage_raw(int fd) {
   uint16_t value;
-  wireReadRegister(INA219_REG_BUSVOLTAGE, &value);
+  //wireReadRegister(INA219_REG_BUSVOLTAGE, &value);
+  value = wiringPiI2CReadReg16(fd, INA219_REG_BUSVOLTAGE);
 
   // Shift to the right 3 to drop CNVR and OVF and multiply by LSB
   return (int16_t)((value >> 3) * 4);
@@ -402,9 +405,10 @@ int16_t getBusVoltage_raw() {
  *  @brief  Gets the raw shunt voltage (16-bit signed integer, so +-32767)
  *  @return the raw shunt voltage reading
  */
-int16_t getShuntVoltage_raw() {
+int16_t getShuntVoltage_raw(int fd) {
   uint16_t value;
-  wireReadRegister(INA219_REG_SHUNTVOLTAGE, &value);
+  //wireReadRegister(INA219_REG_SHUNTVOLTAGE, &value);
+  value = wiringPiI2CReadReg16(fd, IINA219_REG_SHUNTVOLTAGE);
   return (int16_t)value;
 }
 
@@ -412,17 +416,18 @@ int16_t getShuntVoltage_raw() {
  *  @brief  Gets the raw current value (16-bit signed integer, so +-32767)
  *  @return the raw current reading
  */
-int16_t getCurrent_raw() {
+int16_t getCurrent_raw(int fd) {
   uint16_t value;
 
   // Sometimes a sharp load will reset the INA219, which will
   // reset the cal register, meaning CURRENT and POWER will
   // not be available ... avoid this by always setting a cal
   // value even if it's an unfortunate extra step
-  wireWriteRegister(INA219_REG_CALIBRATION, ina219_calValue);
+  wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
 
   // Now we can safely read the CURRENT register!
-  wireReadRegister(INA219_REG_CURRENT, &value);
+  //wireReadRegister(INA219_REG_CURRENT, &value);
+  value = wiringPiI2CReadReg16(fd, INA219_REG_CURRENT);
 
   return (int16_t)value;
 }
@@ -431,17 +436,18 @@ int16_t getCurrent_raw() {
  *  @brief  Gets the raw power value (16-bit signed integer, so +-32767)
  *  @return raw power reading
  */
-int16_t getPower_raw() {
+int16_t getPower_raw(int fd) {
   uint16_t value;
 
   // Sometimes a sharp load will reset the INA219, which will
   // reset the cal register, meaning CURRENT and POWER will
   // not be available ... avoid this by always setting a cal
   // value even if it's an unfortunate extra step
-  wireWriteRegister(INA219_REG_CALIBRATION, ina219_calValue);
+  wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
 
   // Now we can safely read the POWER register!
-  wireReadRegister(INA219_REG_POWER, &value);
+  //wireReadRegister(INA219_REG_POWER, &value);
+  value = wiringPiI2CReadReg16(fd, INA219_REG_POWER);
 
   return (int16_t)value;
 }
@@ -450,7 +456,7 @@ int16_t getPower_raw() {
  *  @brief  Gets the shunt voltage in mV (so +-327mV)
  *  @return the shunt voltage converted to millivolts
  */
-float getShuntVoltage_mV() {
+float getShuntVoltage_mV(int fd) {
   int16_t value;
   value = getShuntVoltage_raw();
   return value * 0.01;
@@ -460,7 +466,7 @@ float getShuntVoltage_mV() {
  *  @brief  Gets the shunt voltage in volts
  *  @return the bus voltage converted to volts
  */
-float getBusVoltage_V() {
+float getBusVoltage_V(int fd) {
   int16_t value = getBusVoltage_raw();
   return value * 0.001;
 }
@@ -470,7 +476,7 @@ float getBusVoltage_V() {
  *          config settings and current LSB
  *  @return the current reading convereted to milliamps
  */
-float getCurrent_mA() {
+float getCurrent_mA(int fd) {
   float valueDec = getCurrent_raw();
   valueDec /= ina219_currentDivider_mA;
   return valueDec;
@@ -481,7 +487,7 @@ float getCurrent_mA() {
  *          config settings and current LSB
  *  @return power reading converted to milliwatts
  */
-float getPower_mW() {
+float getPower_mW(int fd) {
   float valueDec = getPower_raw();
   valueDec *= ina219_powerMultiplier_mW;
   return valueDec;
