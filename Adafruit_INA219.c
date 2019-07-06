@@ -40,7 +40,7 @@
  */
 
 /*  Use wiringPiI2CWriteReg16(x_fd, INA219_REG_CALIBRATION, x_calValue); */
-void wireWriteRegister(uint8_t reg, uint16_t value) {
+void wireWriteRegister(int fd, uint8_t reg, uint16_t value) {
 //  _i2c->beginTransmission(ina219_i2caddr);
 //  _i2c->write(reg);                 // Register
 //  _i2c->write((value >> 8) & 0xFF); // Upper 8-bits
@@ -60,7 +60,7 @@ void wireWriteRegister(uint8_t reg, uint16_t value) {
  *          read value
  *
  * use instead wiringPiI2CReadReg16(x_fd, INA219_REG_CURRENT) */
-uint16_t wireReadRegister(uint8_t reg) {
+uint16_t wireReadRegister(int fd, uint8_t reg) {
 
  // _i2c->beginTransmission(ina219_i2caddr);
  // _i2c->write(reg); // Register
