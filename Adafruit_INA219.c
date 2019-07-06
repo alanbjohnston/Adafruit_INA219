@@ -363,7 +363,7 @@ void setCalibration_16V_400mA(int fd) {
 
   // Set Calibration register to 'Cal' calculated above
   //wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
-  wireWriteRegister(fd, NA219_REG_CALIBRATION, ina219_calValue);
+  wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
 
   // Set Config register to take into account the settings above
   uint16_t config = INA219_CONFIG_BVOLTAGERANGE_16V |
