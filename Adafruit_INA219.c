@@ -408,7 +408,7 @@ int16_t getBusVoltage_raw(int fd) {
 int16_t getShuntVoltage_raw(int fd) {
   uint16_t value;
   //wireReadRegister(INA219_REG_SHUNTVOLTAGE, &value);
-  value = wiringPiI2CReadReg16(fd, IINA219_REG_SHUNTVOLTAGE);
+  value = wiringPiI2CReadReg16(fd, INA219_REG_SHUNTVOLTAGE);
   return (int16_t)value;
 }
 
@@ -458,7 +458,7 @@ int16_t getPower_raw(int fd) {
  */
 float getShuntVoltage_mV(int fd) {
   int16_t value;
-  value = getShuntVoltage_raw();
+  value = getShuntVoltage_raw(fd);
   return value * 0.01;
 }
 
@@ -467,7 +467,7 @@ float getShuntVoltage_mV(int fd) {
  *  @return the bus voltage converted to volts
  */
 float getBusVoltage_V(int fd) {
-  int16_t value = getBusVoltage_raw();
+  int16_t value = getBusVoltage_raw(fd);
   return value * 0.001;
 }
 
@@ -477,7 +477,7 @@ float getBusVoltage_V(int fd) {
  *  @return the current reading convereted to milliamps
  */
 float getCurrent_mA(int fd) {
-  float valueDec = getCurrent_raw();
+  float valueDec = getCurrent_raw(fd);
   valueDec /= ina219_currentDivider_mA;
   return valueDec;
 }
@@ -488,7 +488,7 @@ float getCurrent_mA(int fd) {
  *  @return power reading converted to milliwatts
  */
 float getPower_mW(int fd) {
-  float valueDec = getPower_raw();
+  float valueDec = getPower_raw(fd);
   valueDec *= ina219_powerMultiplier_mW;
   return valueDec;
 }
