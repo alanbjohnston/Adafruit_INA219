@@ -60,17 +60,19 @@ void wireWriteRegister(uint8_t reg, uint16_t value) {
  *          read value
  *
  * use instead wiringPiI2CReadReg16(x_fd, INA219_REG_CURRENT) */
-void wireReadRegister(uint8_t reg, uint16_t *value) {
+uint16_t wireReadRegister(uint8_t reg) {
 
  // _i2c->beginTransmission(ina219_i2caddr);
  // _i2c->write(reg); // Register
  // _i2c->endTransmission();
 
 //  delay(1); // Max 12-bit conversion time is 586us per sample
-;
+  millis(1);
  // _i2c->requestFrom(ina219_i2caddr, (uint8_t)2);
   // Shift values to create properly formed integer
  // *value = ((_i2c->read() << 8) | _i2c->read());
+  value = ((wiringPiI2CRead(fd) << 8 ) | wiringPiI2CRead (fd)));
+  return value;
 }
 
 /*!
