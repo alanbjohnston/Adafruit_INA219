@@ -16,9 +16,6 @@
  *
  */
 
-#ifndef _LIB_ADAFRUIT_INA219_
-#define _LIB_ADAFRUIT_INA219_
-
 #include <wiringPi.h>
 
 /** default I2C address **/
@@ -129,14 +126,14 @@ enum {
  *  current/power monitor IC
  */
   //void begin(TwoWire *theWire = &Wire);
-  void setCalibration_32V_2A();
-  void setCalibration_32V_1A();
-  void setCalibration_16V_400mA();
-  float getBusVoltage_V();
-  float getShuntVoltage_mV();
-  float getCurrent_mA();
-  float getPower_mW();
-  void powerSave(int on);
+  void setCalibration_32V_2A(int fd);
+  void setCalibration_32V_1A(int fd);
+  void setCalibration_16V_400mA(int fd);
+  float getBusVoltage_V(int fd);
+  float getShuntVoltage_mV(int fd);
+  float getCurrent_mA(int fd);
+  float getPower_mW(int fd);
+  void powerSave(int fd, int on);
 
   uint8_t ina219_i2caddr;
   uint32_t ina219_calValue;
@@ -148,10 +145,8 @@ enum {
   void init();
   void wireWriteRegister(uint8_t reg, uint16_t value);
   void wireReadRegister(uint8_t reg, uint16_t *value);
-  int16_t getBusVoltage_raw();
-  int16_t getShuntVoltage_raw();
-  int16_t getCurrent_raw();
-  int16_t getPower_raw();
+  int16_t getBusVoltage_raw(int fd);
+  int16_t getShuntVoltage_raw(int fd);
+  int16_t getCurrent_raw(int fd);
+  int16_t getPower_raw(int fd);
 
-
-#endif
