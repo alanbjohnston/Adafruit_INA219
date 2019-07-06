@@ -27,6 +27,7 @@
  */
 
 #include <wiringPi.h>
+#include <wiringPiI2C.h>
 #include <stdint.h>
 #include <time.h>
 #include "Adafruit_INA219.h"
