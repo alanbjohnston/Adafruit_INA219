@@ -47,7 +47,8 @@ void wireWriteRegister(uint8_t reg, uint16_t value) {
 //  _i2c->write(value & 0xFF);        // Lower 8-bits
 //  _i2c->endTransmission();
 //  delay();
-  ;
+  int x_fd;
+  wiringPiI2CWriteReg16(x_fd, reg, value);
 }
 
 
