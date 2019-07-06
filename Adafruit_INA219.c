@@ -67,7 +67,7 @@ uint16_t wireReadRegister(int fd, uint8_t reg) {
  // _i2c->endTransmission();
 
 //  delay(1); // Max 12-bit conversion time is 586us per sample
-  millis(1);
+  delay(1);
  // _i2c->requestFrom(ina219_i2caddr, (uint8_t)2);
   // Shift values to create properly formed integer
  // *value = ((_i2c->read() << 8) | _i2c->read());
