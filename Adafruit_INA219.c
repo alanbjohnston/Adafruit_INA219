@@ -73,7 +73,7 @@ uint16_t wireReadRegister(int fd, uint8_t reg) {
  // _i2c->requestFrom(ina219_i2caddr, (uint8_t)2);
   // Shift values to create properly formed integer
  // *value = ((_i2c->read() << 8) | _i2c->read());
-  value = ((wiringPiI2CRead(fd) << 8 ) | wiringPiI2CRead (fd)));
+  value = ((wiringPiI2CRead(fd) << 8 ) | wiringPiI2CRead (fd));
   return value;
 }
 
