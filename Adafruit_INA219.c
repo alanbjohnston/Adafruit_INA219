@@ -444,7 +444,7 @@ void setCalibration_16V_2A(int fd) {  // For 16V, 2.5 A, 0.01 Ohm sensor 0x4a in
 
   // Set multipliers to convert raw current/power values
   ina219_currentDivider_mA = 10; // 40;  // Current LSB = 50uA per bit (1000/50 = 20)
-  ina219_powerMultiplier_mW = 2.0f // 1.0f; // Power LSB = 1mW per bit
+  ina219_powerMultiplier_mW = 2.0f; // 1.0f; // Power LSB = 1mW per bit
 
   // Set Calibration register to 'Cal' calculated above
   //wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
