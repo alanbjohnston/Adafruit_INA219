@@ -129,6 +129,7 @@ enum {
   void setCalibration_32V_2A(int fd);
   void setCalibration_32V_1A(int fd);
   void setCalibration_16V_400mA(int fd);
+  void setCalibration_16V_2A(int fd);
   float getBusVoltage_V(int fd);
   float getShuntVoltage_mV(int fd);
   float getCurrent_mA(int fd);
