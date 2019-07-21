@@ -587,7 +587,7 @@ float getBusVoltage_V(int fd) {
  */
 float getCurrent_mA(int fd) {
   float valueDec = getCurrent_raw(fd);
-  valueDec /= ina219_currentDivider_mA;
+  valueDec /= (float)ina219_currentDivider_mA;
   return valueDec;
 }
 
