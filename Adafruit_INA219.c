@@ -50,8 +50,11 @@ void wireWriteRegister(int fd, uint8_t reg, uint16_t value) {
 //  delay();
   
   wiringPiI2CWrite(fd, reg);
+  delay(1); // Max 12-bit conversion time is 586us per sample
   wiringPiI2CWrite(fd, ((value >> 8) & 0xFF));
+  delay(1); // Max 12-bit conversion time is 586us per sample
   wiringPiI2CWrite(fd, (value & 0xFF));
+  delay(1); // Max 12-bit conversion time is 586us per sample
   
   //int x_fd;
   //wiringPiI2CWriteReg16(x_fd, reg, value);
