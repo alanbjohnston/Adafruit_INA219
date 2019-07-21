@@ -79,7 +79,7 @@ uint16_t wireReadRegister(int fd, uint8_t reg) {
   // _i2c->requestFrom(ina219_i2caddr, (uint8_t)2);
   // Shift values to create properly formed integer
  // *value = ((_i2c->read() << 8) | _i2c->read());
-  value = ((wiringPiI2CRead(fd) << 8 ) | wiringPiI2CRead (fd));
+  value = (uint16_t)((wiringPiI2CRead(fd) << 8 ) | wiringPiI2CRead (fd));
   return value;
 }
 
@@ -184,9 +184,9 @@ void powerSave(int fd, int on) {
   
   uint8_t next;
   if (on) {
-    next = current | INA219_CONFIG_MODE_POWERDOWN; 
+    next = (uint8_t)(current | INA219_CONFIG_MODE_POWERDOWN); 
   } else {
-    next = current & ~INA219_CONFIG_MODE_POWERDOWN; 
+    next = (uint8_t)(current & ~INA219_CONFIG_MODE_POWERDOWN); 
   }
   //wiringPiI2CWriteReg16(fd, INA219_REG_CONFIG, next);
   wireWriteRegister(fd, INA219_REG_CONFIG, next);
@@ -568,7 +568,7 @@ int16_t getPower_raw(int fd) {
 float getShuntVoltage_mV(int fd) {
   int16_t value;
   value = getShuntVoltage_raw(fd);
-  return value * 0.01;
+  return (float)(value * 0.01);
 }
 
 /*!
@@ -577,7 +577,7 @@ float getShuntVoltage_mV(int fd) {
  */
 float getBusVoltage_V(int fd) {
   int16_t value = getBusVoltage_raw(fd);
-  return value * 0.001;
+  return (float)(value * 0.001);
 }
 
 /*!
@@ -598,6 +598,6 @@ float getCurrent_mA(int fd) {
  */
 float getPower_mW(int fd) {
   float valueDec = getPower_raw(fd);
-  valueDec *= ina219_powerMultiplier_mW;
+  valueDec *= (float)ina219_powerMultiplier_mW;
   return valueDec;
 }
