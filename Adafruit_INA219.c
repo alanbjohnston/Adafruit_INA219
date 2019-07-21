@@ -67,7 +67,7 @@ void wireWriteRegister(int fd, uint8_t reg, uint16_t value) {
  *
  * use instead wiringPiI2CReadReg16(x_fd, INA219_REG_CURRENT) */
 uint16_t wireReadRegister(int fd, uint8_t reg) {
-  int16_t value;
+  uint16_t value;
   
  // _i2c->beginTransmission(ina219_i2caddr);
  // _i2c->write(reg); // Register
@@ -79,7 +79,7 @@ uint16_t wireReadRegister(int fd, uint8_t reg) {
   // _i2c->requestFrom(ina219_i2caddr, (uint8_t)2);
   // Shift values to create properly formed integer
  // *value = ((_i2c->read() << 8) | _i2c->read());
-  value = (int16_t)((wiringPiI2CRead(fd) << 8 ) | wiringPiI2CRead (fd));
+  value = (uint16_t)((wiringPiI2CRead(fd) << 8 ) | wiringPiI2CRead (fd));
   return value;
 }
 
