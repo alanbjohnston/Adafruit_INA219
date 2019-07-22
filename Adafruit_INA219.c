@@ -500,8 +500,8 @@ void init(int fd) {
 int16_t getBusVoltage_raw(int fd) {
   uint16_t value;
   //wireReadRegister(INA219_REG_BUSVOLTAGE, &value);
- // value = wiringPiI2CReadReg16(fd, INA219_REG_BUSVOLTAGE);
-  value = wireReadRegister(fd, INA219_REG_BUSVOLTAGE);
+  value = wiringPiI2CReadReg16(fd, INA219_REG_BUSVOLTAGE);
+//  value = wireReadRegister(fd, INA219_REG_BUSVOLTAGE);
   // Shift to the right 3 to drop CNVR and OVF and multiply by LSB
   return (int16_t)((value >> 3) * 4);
 }
@@ -529,13 +529,15 @@ int16_t getCurrent_raw(int fd) {
   // reset the cal register, meaning CURRENT and POWER will
   // not be available ... avoid this by always setting a cal
   // value even if it's an unfortunate extra step
-  //wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
-  wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
+  wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
+  wiringPiI2CWriteReg16(x_fd, INA219_REG_CALIBRATION, x_calValue_x);  // config need to fix this!
+  wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
+  //wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
 
   // Now we can safely read the CURRENT register!
   //wireReadRegister(INA219_REG_CURRENT, &value);
-  //value = wiringPiI2CReadReg16(fd, INA219_REG_CURRENT);
-  value = wireReadRegister(fd, INA219_REG_CURRENT);
+  value = wiringPiI2CReadReg16(fd, INA219_REG_CURRENT);
+  //value = wireReadRegister(fd, INA219_REG_CURRENT);
   return (int16_t)value;
 }
 
