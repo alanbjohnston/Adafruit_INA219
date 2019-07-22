@@ -448,7 +448,7 @@ void setCalibration_16V_2A(int fd) {  // For 16V, 2.5 A, 0.01 Ohm sensor 0x4a in
 
   // Set Calibration register to 'Cal' calculated above
   //wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
-  wiringPiI2CWriteReg16fd, INA219_REG_CALIBRATION, ina219_calValue);
+  wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
 
   // Set Config register to take into account the settings above
   ina219_config = INA219_CONFIG_BVOLTAGERANGE_16V |
@@ -511,11 +511,11 @@ int16_t getBusVoltage_raw(int fd) {
  *  @return the raw shunt voltage reading
  */
 int16_t getShuntVoltage_raw(int fd) {
-  uint16_t value;
+  int16_t value;
   //wireReadRegister(INA219_REG_SHUNTVOLTAGE, &value);
-  value = wiringPiI2CReadReg16(fd, INA219_REG_SHUNTVOLTAGE);
+  value = (int16_t)wiringPiI2CReadReg16(fd, INA219_REG_SHUNTVOLTAGE);
   //value = wireReadRegister(fd, INA219_REG_SHUNTVOLTAGE);
-  return (int16_t)value;
+  return value;
 }
 
 /*!
@@ -546,7 +546,7 @@ int16_t getCurrent_raw(int fd) {
  *  @return raw power reading
  */
 int16_t getPower_raw(int fd) {
-  uint16_t value;
+  int16_t value;
 
   // Sometimes a sharp load will reset the INA219, which will
   // reset the cal register, meaning CURRENT and POWER will
@@ -557,10 +557,10 @@ int16_t getPower_raw(int fd) {
                     
   // Now we can safely read the POWER register!
   //wireReadRegister(INA219_REG_POWER, &value);
-  value = wiringPiI2CReadReg16(fd, INA219_REG_POWER);
+  value = (int16_t)wiringPiI2CReadReg16(fd, INA219_REG_POWER);
   //value = wireReadRegister(fd, INA219_REG_POWER);
   
-  return (int16_t)value;
+  return value;
 }
 
 /*!
