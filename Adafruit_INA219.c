@@ -179,7 +179,7 @@ void setCalibration_32V_2A(int fd) {
 void powerSave(int fd, int on) {
   uint16_t current;
   //wireReadRegister(INA219_REG_CONFIG, &current);
-  current = wiringPiI2CReadReg16(fd, INA219_REG_CONFIG);
+  current = (uint16_t)wiringPiI2CReadReg16(fd, INA219_REG_CONFIG);
  // current = wireReadRegister(fd, INA219_REG_CONFIG);
   
   uint8_t next;
