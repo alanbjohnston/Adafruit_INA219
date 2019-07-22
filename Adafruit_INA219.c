@@ -50,8 +50,11 @@ void wireWriteRegister(int fd, uint8_t reg, uint16_t value) {
 //  delay();
   
   wiringPiI2CWrite(fd, reg);
+  delay(1); // Max 12-bit conversion time is 586us per sample
   wiringPiI2CWrite(fd, ((value >> 8) & 0xFF));
+  delay(1); // Max 12-bit conversion time is 586us per sample
   wiringPiI2CWrite(fd, (value & 0xFF));
+  delay(1); // Max 12-bit conversion time is 586us per sample
   
   //int x_fd;
   //wiringPiI2CWriteReg16(x_fd, reg, value);
@@ -67,19 +70,19 @@ void wireWriteRegister(int fd, uint8_t reg, uint16_t value) {
  *
  * use instead wiringPiI2CReadReg16(x_fd, INA219_REG_CURRENT) */
 uint16_t wireReadRegister(int fd, uint8_t reg) {
-  int16_t value;
+  uint16_t value;
   
  // _i2c->beginTransmission(ina219_i2caddr);
  // _i2c->write(reg); // Register
  // _i2c->endTransmission();
   wiringPiI2CWrite(fd, reg);
   
-  delay(1); // Max 12-bit conversion time is 586us per sample
+  delay(2); // Max 12-bit conversion time is 586us per sample
 
   // _i2c->requestFrom(ina219_i2caddr, (uint8_t)2);
   // Shift values to create properly formed integer
  // *value = ((_i2c->read() << 8) | _i2c->read());
-  value = ((wiringPiI2CRead(fd) << 8 ) | wiringPiI2CRead (fd));
+  value = (uint16_t)((wiringPiI2CRead(fd) << 8 ) | wiringPiI2CRead (fd));
   return value;
 }
 
@@ -184,9 +187,9 @@ void powerSave(int fd, int on) {
   
   uint8_t next;
   if (on) {
-    next = current | INA219_CONFIG_MODE_POWERDOWN; 
+    next = (uint8_t)(current | INA219_CONFIG_MODE_POWERDOWN); 
   } else {
-    next = current & ~INA219_CONFIG_MODE_POWERDOWN; 
+    next = (uint8_t)(current & ~INA219_CONFIG_MODE_POWERDOWN); 
   }
   //wiringPiI2CWriteReg16(fd, INA219_REG_CONFIG, next);
   wireWriteRegister(fd, INA219_REG_CONFIG, next);
@@ -531,7 +534,8 @@ int16_t getCurrent_raw(int fd) {
   // value even if it's an unfortunate extra step
   //wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
   wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
-
+  wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);  // 2nd write just in case
+  delay(2);
   // Now we can safely read the CURRENT register!
   //wireReadRegister(INA219_REG_CURRENT, &value);
   //value = wiringPiI2CReadReg16(fd, INA219_REG_CURRENT);
@@ -568,7 +572,7 @@ int16_t getPower_raw(int fd) {
 float getShuntVoltage_mV(int fd) {
   int16_t value;
   value = getShuntVoltage_raw(fd);
-  return value * 0.01;
+  return (float)(value * 0.01);
 }
 
 /*!
@@ -577,7 +581,7 @@ float getShuntVoltage_mV(int fd) {
  */
 float getBusVoltage_V(int fd) {
   int16_t value = getBusVoltage_raw(fd);
-  return value * 0.001;
+  return (float)(value * 0.001);
 }
 
 /*!
@@ -587,7 +591,7 @@ float getBusVoltage_V(int fd) {
  */
 float getCurrent_mA(int fd) {
   float valueDec = getCurrent_raw(fd);
-  valueDec /= ina219_currentDivider_mA;
+  valueDec /= (float)ina219_currentDivider_mA;
   return valueDec;
 }
 
@@ -598,6 +602,6 @@ float getCurrent_mA(int fd) {
  */
 float getPower_mW(int fd) {
   float valueDec = getPower_raw(fd);
-  valueDec *= ina219_powerMultiplier_mW;
+  valueDec *= (float)ina219_powerMultiplier_mW;
   return valueDec;
 }
