@@ -162,8 +162,8 @@ void setCalibration_32V_2A(int fd) {
   ina219_powerMultiplier_mW = 2; // Power LSB = 1mW per bit (2/1)
   
   #ifdef DEBUG_LOGGING
-    printf("INFO: Adafruit_INA219 for %d calValue: %d currentDivider: %d powerMultiplier: %d \n", 
-            fd, ina219_calValue, ina_urrentDivider_mA, ina219_powerMultiplier_mW);
+    printf("INFO: Adafruit_INA219 for %d calValue: %d currentDivider: %d powerMultiplier: %f \n", 
+            fd, ina219_calValue, ina219_currentDivider_mA, ina219_powermultiplier_mW);
   #endif
 
   // Set Calibration register to 'Cal' calculated above
@@ -278,7 +278,12 @@ void setCalibration_32V_1A(int fd) {
   // Set multipliers to convert raw current/power values
   ina219_currentDivider_mA = 25;    // Current LSB = 40uA per bit (1000/40 = 25)
   ina219_powerMultiplier_mW = 0.8f; // Power LSB = 800uW per bit
-
+  
+  #ifdef DEBUG_LOGGING
+    printf("INFO: Adafruit_INA219 for %d calValue: %d currentDivider: %d powerMultiplier: %f \n", 
+            fd, ina219_calValue, ina_currentDivider_mA, ina219_powerMultiplier_mW);
+  #endif
+  
   // Set Calibration register to 'Cal' calculated above
   //wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
   wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
@@ -368,7 +373,12 @@ void setCalibration_16V_400mA(int fd) {
   // Set multipliers to convert raw current/power values
   ina219_currentDivider_mA = 40; // default value of 20 gives 2x current reading; // Current LSB = 50uA per bit (1000/50 = 20)
   ina219_powerMultiplier_mW = 1.0f; // Power LSB = 1mW per bit
-
+  
+  #ifdef DEBUG_LOGGING
+    printf("INFO: Adafruit_INA219 for %d calValue: %d currentDivider: %d powerMultiplier: %f \n", 
+            fd, ina219_calValue, ina219_currentDivider_mA, ina219_powerMultiplier_mW);
+  #endif
+  
   // Set Calibration register to 'Cal' calculated above
   //wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
   wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
@@ -453,7 +463,12 @@ void setCalibration_16V_2A(int fd) {  // For 16V, 2.5 A, 0.01 Ohm sensor 0x4a in
   // Set multipliers to convert raw current/power values
   ina219_currentDivider_mA = 10; // 40;  // Current LSB = 50uA per bit (1000/50 = 20)
   ina219_powerMultiplier_mW = 2.0f; // 1.0f; // Power LSB = 1mW per bit
-
+   
+  #ifdef DEBUG_LOGGING
+    printf("INFO: Adafruit_INA219 for %d calValue: %d currentDivider: %d powerMultiplier: %f \n", 
+            fd, ina219_calValue, ina219_currentDivider_mA, ina219_powerMultiplier_mW);
+  #endif
+  
   // Set Calibration register to 'Cal' calculated above
   //wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
   wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
