@@ -500,7 +500,7 @@ void init(int fd) {
 int16_t getBusVoltage_raw(int fd) {
   uint16_t value;
   //wireReadRegister(INA219_REG_BUSVOLTAGE, &value);
-  value = wiringPiI2CReadReg16(fd, INA219_REG_BUSVOLTAGE);
+  value = (uint16_t) wiringPiI2CReadReg16(fd, INA219_REG_BUSVOLTAGE);
 //  value = wireReadRegister(fd, INA219_REG_BUSVOLTAGE);
   // Shift to the right 3 to drop CNVR and OVF and multiply by LSB
   return (int16_t)((value >> 3) * 4);
@@ -523,7 +523,7 @@ int16_t getShuntVoltage_raw(int fd) {
  *  @return the raw current reading
  */
 int16_t getCurrent_raw(int fd) {
-  uint16_t value;
+  int16_t value;
 
   // Sometimes a sharp load will reset the INA219, which will
   // reset the cal register, meaning CURRENT and POWER will
@@ -536,9 +536,9 @@ int16_t getCurrent_raw(int fd) {
 
   // Now we can safely read the CURRENT register!
   //wireReadRegister(INA219_REG_CURRENT, &value);
-  value = wiringPiI2CReadReg16(fd, INA219_REG_CURRENT);
+  value = (int16_t) wiringPiI2CReadReg16(fd, INA219_REG_CURRENT);
   //value = wireReadRegister(fd, INA219_REG_CURRENT);
-  return (int16_t)value;
+  return value;
 }
 
 /*!
