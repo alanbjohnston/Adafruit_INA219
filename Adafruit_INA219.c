@@ -50,11 +50,8 @@ void wireWriteRegister(int fd, uint8_t reg, uint16_t value) {
 //  delay();
   
   wiringPiI2CWrite(fd, reg);
-  delay(1); // Max 12-bit conversion time is 586us per sample
   wiringPiI2CWrite(fd, ((value >> 8) & 0xFF));
-  delay(1); // Max 12-bit conversion time is 586us per sample
   wiringPiI2CWrite(fd, (value & 0xFF));
-  delay(1); // Max 12-bit conversion time is 586us per sample
   
   //int x_fd;
   //wiringPiI2CWriteReg16(x_fd, reg, value);
@@ -77,7 +74,7 @@ uint16_t wireReadRegister(int fd, uint8_t reg) {
  // _i2c->endTransmission();
   wiringPiI2CWrite(fd, reg);
   
-  delay(2); // Max 12-bit conversion time is 586us per sample
+  delay(1); // Max 12-bit conversion time is 586us per sample
 
   // _i2c->requestFrom(ina219_i2caddr, (uint8_t)2);
   // Shift values to create properly formed integer
@@ -534,8 +531,7 @@ int16_t getCurrent_raw(int fd) {
   // value even if it's an unfortunate extra step
   //wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
   wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
-  wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);  // 2nd write just in case
-  delay(2);
+
   // Now we can safely read the CURRENT register!
   //wireReadRegister(INA219_REG_CURRENT, &value);
   //value = wiringPiI2CReadReg16(fd, INA219_REG_CURRENT);
