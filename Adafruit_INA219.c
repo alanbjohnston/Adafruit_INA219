@@ -529,8 +529,8 @@ int16_t getCurrent_raw(int fd) {
   // reset the cal register, meaning CURRENT and POWER will
   // not be available ... avoid this by always setting a cal
   // value even if it's an unfortunate extra step
-  wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
-  wiringPiI2CWriteReg16(fd, INA219_REG_CONFIG, ina219_config);
+  //wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
+  //wiringPiI2CWriteReg16(fd, INA219_REG_CONFIG, ina219_config);
   wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
   //wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
 
