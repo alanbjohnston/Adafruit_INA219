@@ -164,7 +164,7 @@ void setCalibration_32V_2A(int fd) {
   
   #ifdef DEBUG_LOGGING
     printf("INFO: Adafruit_INA219 for %d calValue: %d currentDivider: %d powerMultiplier: %f \n", 
-            fd, ina219_calValue, ina219_currentDivider_mA, ina219_powerMultiplier_mW);
+                fd, ina219_calValue, ina219_currentDivider_mA, ina219_powerMultiplier_mW);
   #endif
 
   // Set Calibration register to 'Cal' calculated above
