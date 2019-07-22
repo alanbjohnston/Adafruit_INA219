@@ -554,9 +554,13 @@ int16_t getCurrent_raw(int fd) {
   // not be available ... avoid this by always setting a cal
   // value even if it's an unfortunate extra step
   //wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
-  wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
-  wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);  // 2nd write just in case
-  delay(2);
+  //wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
+    
+// addition writes in master code  
+  setCalibration_16V_400mA(fd); // write calibration and config
+  wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);  // write calibration
+                    
+  delay(1);
   // Now we can safely read the CURRENT register!
   //wireReadRegister(INA219_REG_CURRENT, &value);
   //value = wiringPiI2CReadReg16(fd, INA219_REG_CURRENT);
@@ -577,7 +581,6 @@ int16_t getPower_raw(int fd) {
   // value even if it's an unfortunate extra step
   //wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
   wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
-                    
   // Now we can safely read the POWER register!
   //wireReadRegister(INA219_REG_POWER, &value);
   //value = wiringPiI2CReadReg16(fd, INA219_REG_POWER);
