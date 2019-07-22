@@ -163,12 +163,12 @@ void setCalibration_32V_2A(int fd) {
   wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
   
   // Set Config register to take into account the settings above
-  uint16_t config = INA219_CONFIG_BVOLTAGERANGE_32V |
+  ina219_config = INA219_CONFIG_BVOLTAGERANGE_32V |
                     INA219_CONFIG_GAIN_8_320MV | INA219_CONFIG_BADCRES_12BIT |
                     INA219_CONFIG_SADCRES_12BIT_1S_532US |
                     INA219_CONFIG_MODE_SANDBVOLT_CONTINUOUS;
   //wiringPiI2CWriteReg16(fd, INA219_REG_CONFIG, config);
-  wireWriteRegister(fd, INA219_REG_CONFIG, config);
+  wireWriteRegister(fd, INA219_REG_CONFIG, ina219_config);
 }
 
 /*!
@@ -276,12 +276,12 @@ void setCalibration_32V_1A(int fd) {
   wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
 
   // Set Config register to take into account the settings above
-  uint16_t config = INA219_CONFIG_BVOLTAGERANGE_32V |
+  ina219_config = INA219_CONFIG_BVOLTAGERANGE_32V |
                     INA219_CONFIG_GAIN_8_320MV | INA219_CONFIG_BADCRES_12BIT |
                     INA219_CONFIG_SADCRES_12BIT_1S_532US |
                     INA219_CONFIG_MODE_SANDBVOLT_CONTINUOUS;
   //wiringPiI2CWriteReg16(fd, INA219_REG_CONFIG, config);
-  wireWriteRegister(fd, INA219_REG_CONFIG, config);
+  wireWriteRegister(fd, INA219_REG_CONFIG, ina219_config);
 }
 
 /*!
@@ -366,12 +366,12 @@ void setCalibration_16V_400mA(int fd) {
   wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
 
   // Set Config register to take into account the settings above
-  uint16_t config = INA219_CONFIG_BVOLTAGERANGE_16V |
+  ina219_config = INA219_CONFIG_BVOLTAGERANGE_16V |
                     INA219_CONFIG_GAIN_1_40MV | INA219_CONFIG_BADCRES_12BIT |
                     INA219_CONFIG_SADCRES_12BIT_1S_532US |
                     INA219_CONFIG_MODE_SANDBVOLT_CONTINUOUS;
   //wiringPiI2CWriteReg16(fd, INA219_REG_CONFIG, config);
-  wireWriteRegister(fd, INA219_REG_CONFIG, config);
+  wireWriteRegister(fd, INA219_REG_CONFIG, ina219_config);
 }
 
 void setCalibration_16V_2A(int fd) {  // For 16V, 2.5 A, 0.01 Ohm sensor 0x4a in MoPower UPS V2
@@ -451,12 +451,12 @@ void setCalibration_16V_2A(int fd) {  // For 16V, 2.5 A, 0.01 Ohm sensor 0x4a in
   wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
 
   // Set Config register to take into account the settings above
-  uint16_t config = INA219_CONFIG_BVOLTAGERANGE_16V |
+  ina219_config = INA219_CONFIG_BVOLTAGERANGE_16V |
                     INA219_CONFIG_GAIN_1_40MV | INA219_CONFIG_BADCRES_12BIT |
                     INA219_CONFIG_SADCRES_12BIT_1S_532US |
                     INA219_CONFIG_MODE_SANDBVOLT_CONTINUOUS;
   //wiringPiI2CWriteReg16(fd, INA219_REG_CONFIG, config);
-  wireWriteRegister(fd, INA219_REG_CONFIG, config);
+  wireWriteRegister(fd, INA219_REG_CONFIG, ina219_config);
 }
 
 
@@ -530,7 +530,7 @@ int16_t getCurrent_raw(int fd) {
   // not be available ... avoid this by always setting a cal
   // value even if it's an unfortunate extra step
   wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
-  wiringPiI2CWriteReg16(x_fd, INA219_REG_CALIBRATION, x_calValue_x);  // config need to fix this!
+  wireWriteRegister(fd, INA219_REG_CONFIG, ina219_config);
   wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
   //wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
 
@@ -552,8 +552,8 @@ int16_t getPower_raw(int fd) {
   // reset the cal register, meaning CURRENT and POWER will
   // not be available ... avoid this by always setting a cal
   // value even if it's an unfortunate extra step
-  //wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
-  wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
+  wiringPiI2CWriteReg16(fd, INA219_REG_CALIBRATION, ina219_calValue);
+  //wireWriteRegister(fd, INA219_REG_CALIBRATION, ina219_calValue);
                     
   // Now we can safely read the POWER register!
   //wireReadRegister(INA219_REG_POWER, &value);
