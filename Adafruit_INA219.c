@@ -570,7 +570,7 @@ int16_t getPower_raw(int fd) {
 float getShuntVoltage_mV(int fd) {
   int16_t value;
   value = getShuntVoltage_raw(fd);
-  return (float)(value * 0.01);
+  return ((float)value * 0.01);
 }
 
 /*!
@@ -579,7 +579,7 @@ float getShuntVoltage_mV(int fd) {
  */
 float getBusVoltage_V(int fd) {
   int16_t value = getBusVoltage_raw(fd);
-  return (float)(value * 0.001);
+  return ((float)value * 0.001);
 }
 
 /*!
