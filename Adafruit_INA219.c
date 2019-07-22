@@ -30,6 +30,7 @@
 #include <wiringPiI2C.h>
 #include <stdint.h>
 #include <time.h>
+#include <stdio.h>
 #include "Adafruit_INA219.h"
 
 /*!
@@ -163,7 +164,7 @@ void setCalibration_32V_2A(int fd) {
   
   #ifdef DEBUG_LOGGING
     printf("INFO: Adafruit_INA219 for %d calValue: %d currentDivider: %d powerMultiplier: %f \n", 
-            fd, ina219_calValue, ina219_currentDivider_mA, ina219_powermultiplier_mW);
+            fd, ina219_calValue, ina219_currentDivider_mA, ina219_powerMultiplier_mW);
   #endif
 
   // Set Calibration register to 'Cal' calculated above
@@ -281,7 +282,7 @@ void setCalibration_32V_1A(int fd) {
   
   #ifdef DEBUG_LOGGING
     printf("INFO: Adafruit_INA219 for %d calValue: %d currentDivider: %d powerMultiplier: %f \n", 
-            fd, ina219_calValue, ina_currentDivider_mA, ina219_powerMultiplier_mW);
+            fd, ina219_calValue, ina219_currentDivider_mA, ina219_powerMultiplier_mW);
   #endif
   
   // Set Calibration register to 'Cal' calculated above
